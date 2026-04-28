@@ -4,7 +4,7 @@
 
     <groupId>org.flcit.springboot.security</groupId>
     <artifactId>springboot-security-oauth2-api</artifactId>
-    <version>1.0.0</version>
+    <version>1.0.1-SNAPSHOT</version>
 
     <name>${project.artifactId}</name>
     <description>Librairie pour la sécurisation d'une API via Oauth2 (bearer-only)</description>
@@ -32,7 +32,7 @@
         <connection>scm:git:git@github.com:flc-it/springboot-security-oauth2-api.git</connection>
         <developerConnection>scm:git:ssh://git@github.com/flc-it/springboot-security-oauth2-api.git</developerConnection>
         <url>https://github.com/flc-it/springboot-security-oauth2-api</url>
-        <tag>springboot-security-oauth2-api-1.0.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <!-- Paramètres gestionnaire de ticket -->
