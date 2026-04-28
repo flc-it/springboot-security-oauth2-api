@@ -1,0 +1,2 @@
+org.flcit.springboot.security.oauth2.api.SecurityOAuth2ApiAutoConfiguration
+org.flcit.springboot.security.oauth2.api.SecurityOAuth2ConverterAutoConfiguration
