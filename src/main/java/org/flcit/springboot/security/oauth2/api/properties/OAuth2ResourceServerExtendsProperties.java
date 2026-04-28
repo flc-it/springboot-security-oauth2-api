@@ -18,16 +18,14 @@ package org.flcit.springboot.security.oauth2.api.properties;
 
 import org.flcit.springboot.security.oauth2.api.properties.keycloak.KeycloakOAuth2ResourceServerProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 /**
  * 
  * @since 
  * @author Florian Lestic
  */
-@Configuration
 @ConfigurationProperties("spring.security.oauth2.resourceserver.jwt")
-public class Oauth2ResourceServerProperties {
+public class OAuth2ResourceServerExtendsProperties {
 
     private OAuth2ServerAuthorizationProvider provider;
     private KeycloakOAuth2ResourceServerProperties keycloak;

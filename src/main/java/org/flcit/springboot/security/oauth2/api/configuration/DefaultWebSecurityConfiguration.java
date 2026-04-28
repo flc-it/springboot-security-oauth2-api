@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package org.flcit.springboot.security.oauth2.api.filter;
+package org.flcit.springboot.security.oauth2.api.configuration;
 
-import org.flcit.springboot.security.oauth2.api.configuration.WebSecurityConfiguration;
-import org.flcit.springboot.security.oauth2.api.domain.DefaultRoleAdmin;
-import org.flcit.springboot.security.oauth2.api.domain.DefaultRoleApi;
+import org.flcit.springboot.security.oauth2.api.domain.DefaultAuthorityRole;
+import org.springframework.security.core.GrantedAuthority;
 
 /**
  * 
@@ -28,13 +27,13 @@ import org.flcit.springboot.security.oauth2.api.domain.DefaultRoleApi;
 public class DefaultWebSecurityConfiguration implements WebSecurityConfiguration {
 
     @Override
-    public String[] getRolesAdmin() {
-        return new String[] { DefaultRoleAdmin.ADMIN.toString() };
+    public GrantedAuthority[] getAuthoritiesAdmin() {
+        return new GrantedAuthority[] { DefaultAuthorityRole.ADMIN };
     }
 
     @Override
-    public String[] getRolesApi() {
-        return new String[] { DefaultRoleApi.ACCESS.toString() };
+    public GrantedAuthority[] getAuthoritiesApi() {
+        return new GrantedAuthority[] { DefaultAuthorityRole.ACCESS };
     }
 
 }

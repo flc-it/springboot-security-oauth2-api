@@ -26,9 +26,9 @@ import org.flcit.commons.core.util.StringUtils;
  * @author Florian Lestic
  */
 @SuppressWarnings("java:S6548")
-public enum DefaultRoleApi implements GrantedAuthority {
+public enum DefaultAuthorityRole implements GrantedAuthority {
 
-    ACCESS;
+    ACCESS, ADMIN;
 
     private static final String PREFIX = "ROLE_";
 

@@ -16,6 +16,8 @@
 
 package org.flcit.springboot.security.oauth2.api.configuration;
 
+import org.springframework.security.core.GrantedAuthority;
+
 /**
  * 
  * @since 
@@ -26,11 +28,11 @@ public interface WebSecurityConfiguration {
     /**
      * @return
      */
-    public abstract String[] getRolesAdmin();
+    public abstract GrantedAuthority[] getAuthoritiesAdmin();
 
     /**
      * @return
      */
-    public abstract String[] getRolesApi();
+    public abstract GrantedAuthority[] getAuthoritiesApi();
 
 }

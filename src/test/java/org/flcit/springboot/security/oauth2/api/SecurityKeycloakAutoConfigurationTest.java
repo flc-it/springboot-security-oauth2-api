@@ -23,10 +23,10 @@ import java.util.Collections;
 import org.flcit.springboot.commons.test.util.ContextRunnerUtils;
 import org.flcit.springboot.commons.test.util.MvcUtils;
 import org.flcit.springboot.commons.test.util.PropertyTestUtils;
+import org.flcit.springboot.security.oauth2.api.configuration.DefaultWebSecurityConfiguration;
 import org.flcit.springboot.security.oauth2.api.configuration.WebSecurityConfiguration;
 import org.flcit.springboot.security.oauth2.api.converter.JwtPrincipalNameConverter;
-import org.flcit.springboot.security.oauth2.api.domain.DefaultRoleAdmin;
-import org.flcit.springboot.security.oauth2.api.filter.DefaultWebSecurityConfiguration;
+import org.flcit.springboot.security.oauth2.api.domain.DefaultAuthorityAdmin;
 import org.flcit.springboot.security.oauth2.api.token.JwtAuthenticationConverter;
 import org.junit.jupiter.api.Test;
 import org.springdoc.core.models.GroupedOpenApi;
@@ -41,6 +41,7 @@ import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtException;
@@ -64,18 +65,18 @@ class SecurityKeycloakAutoConfigurationTest {
                     SecurityOAuth2ApiAutoConfiguration.class,
                     SecurityOAuth2ConverterAutoConfiguration.class));
 
-    private static final String[] ROLES_API = new String[] { "READ", "WRITE" };
-    private static final String[] ROLES_ADMIN = new String[] { "ADMIN" };
+    private static final GrantedAuthority[] ROLES_API = new GrantedAuthority[] { new SimpleGrantedAuthority("READ"), new SimpleGrantedAuthority("WRITE") };
+    private static final GrantedAuthority[] ROLES_ADMIN = new GrantedAuthority[] { new SimpleGrantedAuthority("ADMIN") };
 
     private static final WebSecurityConfiguration SECURITY_CONFIGURATION = new WebSecurityConfiguration() {
 
         @Override
-        public String[] getRolesApi() {
+        public GrantedAuthority[] getAuthoritiesApi() {
             return ROLES_API;
         }
 
         @Override
-        public String[] getRolesAdmin() {
+        public GrantedAuthority[] getAuthoritiesAdmin() {
             return ROLES_ADMIN;
         }
 
@@ -107,12 +108,12 @@ class SecurityKeycloakAutoConfigurationTest {
     private static final WebSecurityConfiguration SECURITY_CONFIGURATION_NO_ROLES_API = new WebSecurityConfiguration() {
 
         @Override
-        public String[] getRolesApi() {
-            return new String[] {};
+        public GrantedAuthority[] getAuthoritiesApi() {
+            return new GrantedAuthority[] { };
         }
 
         @Override
-        public String[] getRolesAdmin() {
+        public GrantedAuthority[] getAuthoritiesAdmin() {
             return ROLES_ADMIN;
         }
 
@@ -121,13 +122,13 @@ class SecurityKeycloakAutoConfigurationTest {
     private static final WebSecurityConfiguration SECURITY_CONFIGURATION_NO_ROLES_ADMIN = new WebSecurityConfiguration() {
 
         @Override
-        public String[] getRolesApi() {
+        public GrantedAuthority[] getAuthoritiesApi() {
             return ROLES_API;
         }
 
         @Override
-        public String[] getRolesAdmin() {
-            return new String[] { };
+        public GrantedAuthority[] getAuthoritiesAdmin() {
+            return new GrantedAuthority[] { };
         }
 
     };
@@ -222,7 +223,7 @@ class SecurityKeycloakAutoConfigurationTest {
         .withBean(JwtDecoder.class, () -> JWT_DECODER)
         .withBean(JwtAuthenticationConverter.class, () -> JWT_AUTHENTICATION_CONVERTER)
         .run(context ->
-            MvcUtils.assertGetResponseStatus(context, new String[] { DefaultRoleAdmin.ADMIN.toString() }, HttpStatus.OK, ACTUATOR_ADMIN_ENDPOINTS)
+            MvcUtils.assertGetResponseStatus(context, new String[] { DefaultAuthorityAdmin.ADMIN.toString() }, HttpStatus.OK, ACTUATOR_ADMIN_ENDPOINTS)
         );
     }
 

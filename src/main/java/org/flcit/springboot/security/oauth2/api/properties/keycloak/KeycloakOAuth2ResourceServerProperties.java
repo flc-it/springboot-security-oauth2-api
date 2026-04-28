@@ -23,10 +23,12 @@ package org.flcit.springboot.security.oauth2.api.properties.keycloak;
  */
 public class KeycloakOAuth2ResourceServerProperties {
 
+    public static final String DEFAULT_PREFIX_AUTHORITY_REALM = "REALM_";
+
     private String resourceId;
     private String prefixAuthorityScope = "SCOPE_";
-    private String prefixAuthorityResource;
-    private String prefixAuthorityRealm = "REALM_";
+    private String prefixAuthorityResource = "ROLE_";
+    private String prefixAuthorityRealm = DEFAULT_PREFIX_AUTHORITY_REALM;
 
     public String getResourceId() {
         return resourceId;

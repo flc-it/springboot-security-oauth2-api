@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-package org.flcit.springboot.security.oauth2.api.configuration;
+package org.flcit.springboot.security.oauth2.api.filter;
 
+import java.util.Arrays;
+
+import org.flcit.springboot.security.oauth2.api.configuration.WebSecurityConfiguration;
 import org.flcit.springboot.security.oauth2.api.entrypoint.Http401UnauthorizedEntryPoint;
 import org.flcit.springboot.security.oauth2.api.token.JwtAuthenticationConverter;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
@@ -24,6 +27,7 @@ import org.springframework.boot.actuate.info.InfoEndpoint;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.DefaultLoginPageConfigurer;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.header.writers.ReferrerPolicyHeaderWriter.ReferrerPolicy;
@@ -88,11 +92,9 @@ public final class BaseWebSecurityConfigurer {
                     c.requestMatchers("/v3/api-docs/**", "/swagger-ui.html", "/swagger-ui/**").permitAll();
                 }
                 // All Actuator endpoints must have one role
-                c.requestMatchers(EndpointRequest.toAnyEndpoint()).hasAnyRole(webSecurityConfiguration.getRolesAdmin());
-                // Actuator endpoints ADMIN
-                c.requestMatchers(EndpointRequest.toAnyEndpoint()).authenticated();
-                // All endpoints must have one role
-                c.anyRequest().hasAnyRole(webSecurityConfiguration.getRolesApi());
+                c.requestMatchers(EndpointRequest.toAnyEndpoint()).hasAnyAuthority(convert(webSecurityConfiguration.getAuthoritiesAdmin()));
+                // All others API endpoints must have one role
+                c.anyRequest().hasAnyAuthority(convert(webSecurityConfiguration.getAuthoritiesApi()));
             })
             .oauth2ResourceServer(c -> c.jwt(j -> j
                     .decoder(jwtDecoder)
@@ -100,12 +102,16 @@ public final class BaseWebSecurityConfigurer {
             .build();
     }
 
+    private static final String[] convert(GrantedAuthority[] authorities) {
+        return Arrays.stream(authorities).map(auth -> auth.getAuthority()).toArray(String[]::new);
+    }
+
     private static final void check(WebSecurityConfiguration webSecurityConfiguration) {
         // All Actuator endpoints must have one role
-        if (ObjectUtils.isEmpty(webSecurityConfiguration.getRolesAdmin())) {
+        if (ObjectUtils.isEmpty(webSecurityConfiguration.getAuthoritiesAdmin())) {
             throw new IllegalStateException("Une configuration de sécurité avec la liste des Roles Admin de l'API est requis ! (voir WebSecurityConfiguration.getRolesAdmin)");
         }
-        if (ObjectUtils.isEmpty(webSecurityConfiguration.getRolesApi())) {
+        if (ObjectUtils.isEmpty(webSecurityConfiguration.getAuthoritiesApi())) {
             throw new IllegalStateException("Une configuration de sécurité avec la liste des Roles de l'API est requis ! (voir WebSecurityConfiguration.getRolesApi)");
         }
     }

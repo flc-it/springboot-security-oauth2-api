@@ -21,13 +21,14 @@ import org.flcit.springboot.security.oauth2.api.converter.JwtGrantedAuthorityCon
 import org.flcit.springboot.security.oauth2.api.converter.JwtPrincipalConverter;
 import org.flcit.springboot.security.oauth2.api.converter.JwtPrincipalNameConverter;
 import org.flcit.springboot.security.oauth2.api.converter.keycloak.KeycloakJwtGrantedAuthorityConverter;
-import org.flcit.springboot.security.oauth2.api.properties.Oauth2ResourceServerProperties;
+import org.flcit.springboot.security.oauth2.api.properties.OAuth2ResourceServerExtendsProperties;
 import org.flcit.springboot.security.oauth2.api.token.JwtAuthenticationConverter;
 import org.flcit.springboot.security.oauth2.api.token.JwtAuthenticationTokenConverter;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,6 +42,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtGra
  */
 @AutoConfiguration
 @ConditionalOnMissingBean(JwtAuthenticationTokenConverter.class)
+@EnableConfigurationProperties(OAuth2ResourceServerExtendsProperties.class)
 public class SecurityOAuth2ConverterAutoConfiguration {
 
     @Bean
@@ -63,7 +65,7 @@ public class SecurityOAuth2ConverterAutoConfiguration {
         map.from(properties.getJwt().getAuthoritiesClaimName())
             .to(grantedAuthoritiesConverter::setAuthoritiesClaimName);
         return grantedAuthoritiesConverter::convert;
-    }   
+    }
 
     @Bean
     @ConditionalOnMissingBean(JwtAuthenticationConverter.class)
@@ -77,7 +79,7 @@ public class SecurityOAuth2ConverterAutoConfiguration {
     static class KeycloakAuthenticationTokenConverterConfiguration {
         @Bean
         @ConditionalOnMissingBean(JwtGrantedAuthorityConverter.class)
-        JwtGrantedAuthorityConverter keycloakJwtGrantedAuthorityConverter(Oauth2ResourceServerProperties properties) {
+        JwtGrantedAuthorityConverter keycloakJwtGrantedAuthorityConverter(OAuth2ResourceServerExtendsProperties properties) {
             return new KeycloakJwtGrantedAuthorityConverter(properties.getKeycloak());
         }
     }

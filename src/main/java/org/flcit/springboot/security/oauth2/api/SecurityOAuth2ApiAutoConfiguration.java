@@ -17,14 +17,17 @@
 package org.flcit.springboot.security.oauth2.api;
 
 import org.flcit.springboot.commons.core.util.EnvironmentUtils;
-import org.flcit.springboot.security.oauth2.api.configuration.BaseWebSecurityConfigurer;
+import org.flcit.springboot.security.oauth2.api.configuration.DefaultWebSecurityConfiguration;
 import org.flcit.springboot.security.oauth2.api.configuration.WebSecurityConfiguration;
-import org.flcit.springboot.security.oauth2.api.filter.DefaultWebSecurityConfiguration;
+import org.flcit.springboot.security.oauth2.api.configuration.keycloak.DefaultKeycloakWebSecurityConfiguration;
+import org.flcit.springboot.security.oauth2.api.filter.BaseWebSecurityConfigurer;
 import org.flcit.springboot.security.oauth2.api.token.JwtAuthenticationConverter;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -69,6 +72,17 @@ public class SecurityOAuth2ApiAutoConfiguration {
             JwtDecoder jwtDecoder,
             JwtAuthenticationConverter jwtAuthenticationConverter) throws Exception {
         return BaseWebSecurityConfigurer.securityFilterChain(http, webSecurityConfiguration, jwtDecoder, jwtAuthenticationConverter);
+    }
+
+    @Configuration(proxyBeanMethods = false)
+    @ConditionalOnMissingBean(WebSecurityConfiguration.class)
+    @ConditionalOnProperty(name = "spring.security.oauth2.resourceserver.jwt.provider", havingValue = "keycloak")
+    static class KeycloakWebSecurityConfiguration {
+        @Bean
+        @ConditionalOnMissingBean(WebSecurityConfiguration.class)
+        WebSecurityConfiguration keycloakWebSecurityConfiguration() {
+            return new DefaultKeycloakWebSecurityConfiguration();
+        }
     }
 
 }

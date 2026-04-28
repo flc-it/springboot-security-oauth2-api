@@ -32,12 +32,12 @@ class RoleTest {
 
     @Test
     void getAuthorityAdminTest() {
-        assertEquals(PREFIX_REALM + "ADMIN", DefaultRoleAdmin.ADMIN.getAuthority());
+        assertEquals(PREFIX_REALM + "ADMIN", DefaultAuthorityAdmin.ADMIN.getAuthority());
     }
 
     @Test
     void getAuthorityApiTest() {
-        assertEquals(PREFIX_ROLE + "ACCESS", DefaultRoleApi.ACCESS.getAuthority());
+        assertEquals(PREFIX_ROLE + "ACCESS", DefaultAuthorityRole.ACCESS.getAuthority());
     }
 
 }

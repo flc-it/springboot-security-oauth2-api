@@ -16,11 +16,9 @@
 
 package org.flcit.springboot.security.oauth2.api.configuration;
 
-import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import org.flcit.springboot.security.oauth2.api.domain.DefaultRoleAdmin;
-import org.flcit.springboot.security.oauth2.api.domain.DefaultRoleApi;
-import org.flcit.springboot.security.oauth2.api.filter.DefaultWebSecurityConfiguration;
+import org.flcit.springboot.security.oauth2.api.domain.DefaultAuthorityRole;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -31,13 +29,13 @@ import org.junit.jupiter.api.Test;
 class WebSecurityConfigurationTest {
 
     @Test
-    void getRolesAdminTest() {
-        assertArrayEquals(new String[] { DefaultRoleAdmin.ADMIN.toString() }, new DefaultWebSecurityConfiguration().getRolesAdmin());
+    void getAuthoritiesAdminTest() {
+        assertEquals(DefaultAuthorityRole.ADMIN, new DefaultWebSecurityConfiguration().getAuthoritiesAdmin()[0]);
     }
 
     @Test
-    void getRolesApiTest() {
-        assertArrayEquals(new String[] { DefaultRoleApi.ACCESS.toString() }, new DefaultWebSecurityConfiguration().getRolesApi());
+    void getAuthoritiesApiTest() {
+        assertEquals(DefaultAuthorityRole.ACCESS, new DefaultWebSecurityConfiguration().getAuthoritiesApi()[0]);
     }
 
 }

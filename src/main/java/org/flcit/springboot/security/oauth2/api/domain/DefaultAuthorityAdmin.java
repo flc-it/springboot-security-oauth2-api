@@ -26,7 +26,7 @@ import org.flcit.commons.core.util.StringUtils;
  * @author Florian Lestic
  */
 @SuppressWarnings("java:S6548")
-public enum DefaultRoleAdmin implements GrantedAuthority {
+public enum DefaultAuthorityAdmin implements GrantedAuthority {
 
     ADMIN;
 
